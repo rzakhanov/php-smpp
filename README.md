@@ -3,7 +3,7 @@ PHP SMPP (v3.4) client
 
 Install:
 
-    composer require rzakhanov/php-smpp
+    composer require alexandr-mironov/php-smpp
     
 Example of wrapper (php>=7.0) for this Client.
 In this case we got ALPHANUMERIC sender value 'github_example':
@@ -113,6 +113,7 @@ class SmsBuilder
 ```
 
 This wrapper implement some kind of Builder pattern, usage example:
+
 ```php
 <?php
 // replace address, port, login and password to your values
