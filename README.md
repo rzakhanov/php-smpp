@@ -3,7 +3,7 @@ PHP SMPP (v3.4) client
 
 Install:
 
-    composer require alexandr-mironov/php-smpp
+    composer require rzakhanov/php-smpp
     
 Example of wrapper (php>=7.0) for this Client.
 In this case we got ALPHANUMERIC sender value 'github_example':
