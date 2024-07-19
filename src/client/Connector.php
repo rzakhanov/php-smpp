@@ -108,6 +108,15 @@ class Connector
     }
 
 
+    public function checkDeliveryQuery(string $messageId)
+    {
+        $this->transport->open();
+        $this->smppClient->bindReceiver($this->login, $this->password);
+
+        return $this->smppClient->readSMS();
+    }
+
+
     public function close(): void
     {
         $this->smppClient->close();
