@@ -88,7 +88,7 @@ class Connector
         return $result;
     }
 
-    public function sendBulkMessages(string $message, bool $closeConnection = true)
+    public function     sendBulkMessages(string $message, bool $closeConnection = true)
     {
         $result = [];
         $this->transport->open();
@@ -112,7 +112,6 @@ class Connector
     {
         $this->transport->open();
         $this->smppClient->bindReceiver($this->login, $this->password);
-
         return $this->smppClient->readSMS();
     }
 
