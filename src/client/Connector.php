@@ -88,7 +88,7 @@ class Connector
         return $result;
     }
 
-    public function     sendBulkMessages(string $message, bool $closeConnection = true)
+    public function sendBulkMessages(string $message, bool $closeConnection = true)
     {
         $result = [];
         $this->transport->open();
