@@ -232,7 +232,7 @@ class Socket
      */
     public function isOpen()
     {
-        if (!is_resource($this->socket)) {
+        if (!is_object($this->socket)) {
             return false;
         }
 
