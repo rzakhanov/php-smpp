@@ -68,7 +68,6 @@ class Connector
     }
 
 
-
     protected function addRecipient($address, $ton = SMPP::TON_UNKNOWN, $npi = SMPP::NPI_UNKNOWN)
     {
         if ($ton === SMPP::TON_INTERNATIONAL) {
@@ -84,7 +83,7 @@ class Connector
         $this->smppClient->bindTransceiver($this->login, $this->password);
         $result = $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
 
-        if($closeConnection) $this->close();
+        if ($closeConnection) $this->close();
         return $result;
     }
 
@@ -96,7 +95,7 @@ class Connector
         foreach ($this->recipients as $recipient) {
             $result[$recipient->value] = $this->smppClient->sendSMS($this->from, $recipient, $message, null, SMPP::DATA_CODING_UCS2);
         }
-        if($closeConnection) $this->close();
+        if ($closeConnection) $this->close();
         return $result;
     }
 
@@ -108,11 +107,16 @@ class Connector
     }
 
 
-    public function checkDeliveryQuery(string $messageId)
+    public function checkDeliveryQuery(string $messageId, $number): bool|array|null
     {
         $this->transport->open();
         $this->smppClient->bindReceiver($this->login, $this->password);
-        return $this->smppClient->readSMS();
+        try {
+            return $this->smppClient->queryStatus($messageId, new Address($number));
+        } catch (\Exception $e) {
+            info('delivered error: ' . $e->getMessage());
+            return false;
+        }
     }
 
 
