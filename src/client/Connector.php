@@ -113,7 +113,7 @@ class Connector
         $this->smppClient->bindReceiver($this->login, $this->password);
         $resp = $this->smppClient->queryStatus($messageId, new Address($number));
 
-        dump($resp);
+        echo $resp;
         try {
             $this->transport->close();
 
