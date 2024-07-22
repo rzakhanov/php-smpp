@@ -112,9 +112,14 @@ class Connector
         $this->transport->open();
         $this->smppClient->bindReceiver($this->login, $this->password);
         try {
-            return $this->smppClient->queryStatus($messageId, new Address($number));
+            $resp = $this->smppClient->queryStatus($messageId, new Address($number));
+            $this->transport->close();
+
+            return $resp;
         } catch (\Exception $e) {
+            echo $e->getMessage();
             info('delivered error: ' . $e->getMessage());
+            $this->transport->close();
             return false;
         }
     }
