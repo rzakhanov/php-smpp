@@ -107,12 +107,14 @@ class Connector
     }
 
 
-    public function checkDeliveryQuery(string $messageId, $number): bool|array|null
+    public function checkDeliveryQuery(string $messageId, $number,$debug = false): bool|array|null
     {
         $this->transport->open();
         $this->smppClient->bindReceiver($this->login, $this->password);
+        $resp = $this->smppClient->queryStatus($messageId, new Address($number));
+
+        dump($resp);
         try {
-            $resp = $this->smppClient->queryStatus($messageId, new Address($number));
             $this->transport->close();
 
             return $resp;
