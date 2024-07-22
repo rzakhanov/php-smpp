@@ -77,31 +77,34 @@ class Connector
         return $this;
     }
 
-    public function sendMessage(string $message, bool $closeConnection = true)
+    public function sendMessage(string $message)
     {
-        $this->transport->open();
+        if(!$this->singleConnection || !$this->transport->isOpen()) $this->transport->open();
+
+
         $this->smppClient->bindTransceiver($this->login, $this->password);
         $result = $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
 
-        if ($closeConnection) $this->close();
         return $result;
     }
 
-    public function sendBulkMessages(string $message, bool $closeConnection = true)
+    public function sendBulkMessages(string $message)
     {
         $result = [];
-        $this->transport->open();
+
+        if(!$this->transport->isOpen()) $this->transport->open();
+
         $this->smppClient->bindTransceiver($this->login, $this->password);
         foreach ($this->recipients as $recipient) {
             $result[$recipient->value] = $this->smppClient->sendSMS($this->from, $recipient, $message, null, SMPP::DATA_CODING_UCS2);
         }
-        if ($closeConnection) $this->close();
         return $result;
     }
 
     public function read(): bool|\smpp\DeliveryReceipt|\smpp\Sms
     {
-        $this->transport->open();
+        if(!$this->transport->isOpen()) $this->transport->open();
+
         $this->smppClient->bindReceiver($this->login, $this->password);
         return $this->smppClient->readSMS();
     }
@@ -109,11 +112,10 @@ class Connector
 
     public function checkDeliveryQuery(string $messageId, $number): bool|array|null
     {
-        $this->transport->open();
+        if(!$this->transport->isOpen()) $this->transport->open();
+
         $this->smppClient->bindReceiver($this->login, $this->password);
-        $resp = $this->smppClient->queryStatus($messageId, new Address($number));
-        $this->transport->close();
-        return $resp;
+        return $this->smppClient->queryStatus($messageId, new Address($number));
     }
 
 
