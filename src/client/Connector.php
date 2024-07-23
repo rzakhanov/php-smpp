@@ -105,7 +105,7 @@ class Connector
     {
         if(!$this->transport->isOpen()) $this->transport->open();
 
-        $this->smppClient->bindReceiver($this->login, $this->password);
+      #  $this->smppClient->bindReceiver($this->login, $this->password);
         return $this->smppClient->readSMS();
     }
 

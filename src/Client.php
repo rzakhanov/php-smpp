@@ -318,7 +318,6 @@ class Client
             if ($pdu->id == $commandID) {
                 //remove response
                 array_splice($this->pduQueue, $i, 1);
-                dump('delivery ---- ');
                 return $this->parseSMS($pdu);
             }
         }
