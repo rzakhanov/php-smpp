@@ -317,6 +317,7 @@ class Client
             $pdu = $this->pduQueue[$i];
             if ($pdu->id == $commandID) {
                 //remove response
+                dump('delivery_sm');
                 array_splice($this->pduQueue, $i, 1);
                 return $this->parseSMS($pdu);
             }
@@ -324,7 +325,10 @@ class Client
         // Read pdu
         do {
             $pdu = $this->readPDU();
+            dump($pdu);
             if ($pdu === false) {
+                dump('delivery_sm false');
+
                 return false;
             } // TSocket v. 0.6.0+ returns false on timeout
             //check for enquire link command

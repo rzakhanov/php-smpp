@@ -15,6 +15,7 @@ class Connector
     protected $transport;
     protected $smppClient;
     protected $debug = false;
+    protected $bound = false;
     protected $from;
     protected $to;
     protected $login;
@@ -77,12 +78,21 @@ class Connector
         return $this;
     }
 
+    protected function bindSocket()
+    {
+        if (!$this->transport->isOpen()) $this->transport->open();
+        if (!$this->bound) {
+            $this->bound = true;
+            $this->smppClient->bindTransceiver($this->login, $this->password);
+        }
+
+    }
+
+
     public function sendMessage(string $message)
     {
-        if(!$this->singleConnection || !$this->transport->isOpen()) $this->transport->open();
+        $this->bindSocket();
 
-
-        $this->smppClient->bindTransceiver($this->login, $this->password);
         $result = $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
 
         return $result;
@@ -92,9 +102,8 @@ class Connector
     {
         $result = [];
 
-        if(!$this->transport->isOpen()) $this->transport->open();
+        $this->bindSocket();
 
-        $this->smppClient->bindTransceiver($this->login, $this->password);
         foreach ($this->recipients as $recipient) {
             $result[$recipient->value] = $this->smppClient->sendSMS($this->from, $recipient, $message, null, SMPP::DATA_CODING_UCS2);
         }
@@ -103,24 +112,21 @@ class Connector
 
     public function read(): bool|\smpp\DeliveryReceipt|\smpp\Sms
     {
-        if(!$this->transport->isOpen()) $this->transport->open();
-
-      #  $this->smppClient->bindReceiver($this->login, $this->password);
+        $this->bindSocket();
         return $this->smppClient->readSMS();
     }
 
 
     public function checkDeliveryQuery(string $messageId, $number): bool|array|null
     {
-        if(!$this->transport->isOpen()) $this->transport->open();
-
-        $this->smppClient->bindReceiver($this->login, $this->password);
+        $this->bindSocket();
         return $this->smppClient->queryStatus($messageId, new Address($number));
     }
 
 
     public function close(): void
     {
+        $this->bound = false;
         $this->smppClient->close();
     }
 
