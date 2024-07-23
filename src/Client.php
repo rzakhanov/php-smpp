@@ -310,6 +310,7 @@ class Client
      */
     public function readSMS()
     {
+        die;
         $commandID = SMPP::DELIVER_SM;
         // Check the queue
         $queueLength = count($this->pduQueue);
