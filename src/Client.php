@@ -315,10 +315,9 @@ class Client
         $queueLength = count($this->pduQueue);
         for ($i = 0; $i < $queueLength; $i++) {
             $pdu = $this->pduQueue[$i];
+            dump($pdu);
             if ($pdu->id == $commandID) {
                 //remove response
-                dump('delivery_sm');
-                dump($pdu);
                 array_splice($this->pduQueue, $i, 1);
                 return $this->parseSMS($pdu);
             }
