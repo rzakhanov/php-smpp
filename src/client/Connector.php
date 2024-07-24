@@ -78,14 +78,13 @@ class Connector
         return $this;
     }
 
-    protected function bindSocket()
+    public function bindSocket(): void
     {
         if (!$this->transport->isOpen()) $this->transport->open();
         if (!$this->bound) {
             $this->bound = true;
             $this->smppClient->bindTransceiver($this->login, $this->password);
         }
-
     }
 
 
@@ -93,9 +92,7 @@ class Connector
     {
         $this->bindSocket();
 
-        $result = $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
-
-        return $result;
+        return $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
     }
 
     public function sendBulkMessages(string $message)
