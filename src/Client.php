@@ -313,6 +313,8 @@ class Client
         $commandID = SMPP::DELIVER_SM;
         // Check the queue
         $queueLength = count($this->pduQueue);
+        dump($queueLength);
+
         for ($i = 0; $i < $queueLength; $i++) {
             $pdu = $this->pduQueue[$i];
             dump($pdu);
