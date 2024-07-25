@@ -98,7 +98,6 @@ class Connector
     public function sendBulkMessages(string $message)
     {
         $result = [];
-
         $this->bindSocket();
 
         foreach ($this->recipients as $recipient) {
