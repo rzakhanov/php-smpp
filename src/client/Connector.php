@@ -44,7 +44,6 @@ class Connector
         $this->transport->setRecvTimeout($timeout);
         $this->smppClient = new SmppClient($this->transport);
 
-        dump('connection');
         // Activate binary hex-output of server interaction
         $this->smppClient->debug = $debug;
         $this->transport->debug = $debug;
