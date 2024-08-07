@@ -90,8 +90,9 @@ class Connector
     public function sendMessage(string $message)
     {
         $this->bindSocket();
-
-        return $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
+        $result =  $this->smppClient->sendSMS($this->from, $this->recipients[0], $message, null, SMPP::DATA_CODING_UCS2);
+        $this->clearRecipient();
+        return $result;
     }
 
     public function sendBulkMessages(string $message)
@@ -102,6 +103,8 @@ class Connector
         foreach ($this->recipients as $recipient) {
             $result[$recipient->value] = $this->smppClient->sendSMS($this->from, $recipient, $message, null, SMPP::DATA_CODING_UCS2);
         }
+
+        $this->clearRecipient();
         return $result;
     }
 
@@ -128,5 +131,11 @@ class Connector
     public function smppClient(): SmppClient
     {
         return $this->smppClient;
+    }
+
+
+    public function clearRecipient(): SmppClient
+    {
+         $this->recipients = [];
     }
 }
