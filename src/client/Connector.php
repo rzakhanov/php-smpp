@@ -134,7 +134,7 @@ class Connector
     }
 
 
-    public function clearRecipient(): SmppClient
+    public function clearRecipient():void
     {
          $this->recipients = [];
     }
